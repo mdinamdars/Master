@@ -1,0 +1,9 @@
+{
+	"name": "midfdemo1",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "d1e41529-e6c9-49e4-87a6-92e1a01b173e",
+		"tenantId": "93017c6e-18fd-4bbb-b10b-54bea1988b4e"
+	}
+}
