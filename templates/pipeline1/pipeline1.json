@@ -1,0 +1,263 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name"
+		},
+		"AzureBlobStorage1": {
+			"type": "string"
+		},
+		"AzureSqlDatabase1": {
+			"type": "string"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Country Name",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "countryname",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Country Code",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "countrycode",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Indicator Name",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "indname",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "Indicator Code",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "indcode",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "2018",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "mes2018",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 4,
+											"precision": 10
+										}
+									},
+									{
+										"source": {
+											"name": "2019",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "mes2019",
+											"type": "Decimal",
+											"physicalType": "decimal",
+											"scale": 4,
+											"precision": 10
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "DelimitedText1",
+								"type": "DatasetReference"
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "AzureSqlTable1",
+								"type": "DatasetReference"
+							}
+						]
+					}
+				],
+				"annotations": [],
+				"lastPublishTime": "2021-11-27T21:11:38Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DelimitedText1')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSqlTable1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('AzureBlobStorage1')]",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "mitest.csv",
+						"container": "sourceblog1"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Country Name",
+						"type": "String"
+					},
+					{
+						"name": "Country Code",
+						"type": "String"
+					},
+					{
+						"name": "Indicator Name",
+						"type": "String"
+					},
+					{
+						"name": "Indicator Code",
+						"type": "String"
+					},
+					{
+						"name": "2018",
+						"type": "String"
+					},
+					{
+						"name": "2019",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlTable1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('AzureSqlDatabase1')]",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "countrycode",
+						"type": "nvarchar"
+					},
+					{
+						"name": "countryname",
+						"type": "nvarchar"
+					},
+					{
+						"name": "indcode",
+						"type": "nvarchar"
+					},
+					{
+						"name": "indname",
+						"type": "nvarchar"
+					},
+					{
+						"name": "mes2018",
+						"type": "decimal",
+						"precision": 10,
+						"scale": 4
+					},
+					{
+						"name": "mes2019",
+						"type": "decimal",
+						"precision": 10,
+						"scale": 4
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "devindex"
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
