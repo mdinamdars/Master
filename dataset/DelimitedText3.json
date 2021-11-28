@@ -1,0 +1,48 @@
+{
+	"name": "DelimitedText3",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "mitest.csv",
+				"container": "sourceblog1"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Country Name",
+				"type": "String"
+			},
+			{
+				"name": "Country Code",
+				"type": "String"
+			},
+			{
+				"name": "Indicator Name",
+				"type": "String"
+			},
+			{
+				"name": "Indicator Code",
+				"type": "String"
+			},
+			{
+				"name": "2018",
+				"type": "String"
+			},
+			{
+				"name": "2019",
+				"type": "String"
+			}
+		]
+	}
+}

@@ -1,0 +1,45 @@
+{
+	"name": "AzureSqlTable2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "countryname",
+				"type": "nvarchar"
+			},
+			{
+				"name": "countrycode",
+				"type": "nvarchar"
+			},
+			{
+				"name": "indname",
+				"type": "nvarchar"
+			},
+			{
+				"name": "indcode",
+				"type": "nvarchar"
+			},
+			{
+				"name": "mes2018",
+				"type": "decimal",
+				"precision": 10,
+				"scale": 4
+			},
+			{
+				"name": "mes2019",
+				"type": "decimal",
+				"precision": 10,
+				"scale": 4
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "devindex"
+		}
+	}
+}
